@@ -257,15 +257,6 @@ dependencies {
     testImplementation("org.hamcrest:hamcrest:2.2")
 }
 
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-    jvmArgs("-ea", "-Dmixin.debug.verbose=true", "-Dmixin.debug.export=true", "-Dmixin.checks.interfaces=true")
-    exclude "**/mixin*"
-}
-
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
             minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
@@ -313,7 +304,9 @@ test {
     maxHeapSize = "2048M"
 
     dependsOn(project.tasks.named("unzipTests"))
-    useJUnitPlatform()
+    useJUnitPlatform {
+        excludeTags "longRunTest"
+    }
 
     // Always run tests, even when nothing changed.
     dependsOn("cleanTest")
@@ -322,6 +315,33 @@ test {
     testLogging {
         events("passed", "skipped", "failed")
     }
+
+    jvmArgs("-ea", "-Dmixin.debug.verbose=true", "-Dmixin.debug.export=true", "-Dmixin.checks.interfaces=true")
+    exclude "**/mixin*"
+}
+
+def longRunTest = tasks.register("longRunTest", Test) {
+    minHeapSize = "512M"
+    maxHeapSize = "2048M"
+
+    useJUnitPlatform {
+        includeTags "longRunTest"
+    }
+
+    // Show test results.
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+
+    jvmArgs("-ea", "-Dmixin.debug.verbose=true", "-Dmixin.debug.export=true", "-Dmixin.checks.interfaces=true")
+    exclude "**/mixin*"
+
+    group = "Verification"
+    shouldRunAfter test
+}
+
+tasks.named("check") {
+    dependsOn longRunTest
 }
 
 publishing {

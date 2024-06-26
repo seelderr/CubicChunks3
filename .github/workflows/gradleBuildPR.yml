@@ -23,4 +23,6 @@ jobs:
         with:
           java-version: 17
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -x test
+      - name: Run tests
+        run: ./gradlew check

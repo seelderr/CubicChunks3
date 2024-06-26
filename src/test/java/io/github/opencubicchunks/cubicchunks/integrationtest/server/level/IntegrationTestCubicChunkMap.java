@@ -17,11 +17,11 @@ import io.github.opencubicchunks.cc_core.utils.Coords;
 import io.github.opencubicchunks.cubicchunks.mixin.test.common.server.level.ChunkHolderTestAccess;
 import io.github.opencubicchunks.cubicchunks.mixin.test.common.server.level.ChunkMapTestAccess;
 import io.github.opencubicchunks.cubicchunks.mixin.test.common.server.level.ServerChunkCacheTestAccess;
+import io.github.opencubicchunks.cubicchunks.test.LongRunTest;
 import io.github.opencubicchunks.cubicchunks.testutils.BaseTest;
 import io.github.opencubicchunks.cubicchunks.testutils.CloseableReference;
 import io.github.opencubicchunks.cubicchunks.world.level.chunklike.CloPos;
 import io.github.opencubicchunks.cubicchunks.world.level.cube.LevelCube;
-import net.minecraft.Util;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkLevel;
 import net.minecraft.server.level.ChunkMap;
@@ -251,6 +251,7 @@ public class IntegrationTestCubicChunkMap extends BaseTest {
     /**
      * Load a single cube at full status
      */
+    @LongRunTest
     @Test public void singleFullCube() throws Exception {
         try(var serverChunkCacheRef = createServerChunkCache()) {
             var serverChunkCache = serverChunkCacheRef.value();
